@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/notedit/gst"
+	"log"
 )
 
 
@@ -15,10 +16,11 @@ func StartServer(ctx context.Context, portStart, portEnd int, sampleChan chan []
 
 	pipelineString := ""
 	for i := portStart; i <= portEnd; i++ {
-		pipelineString += fmt.Sprintf("udpsrc port=%d do-timestamp=true caps=\"application/x-rtp,media=audio,encoding-name=OPUS,clock-rate=48000\" ! rtpopusdepay ! opusdec ! adder.\n", i)
+		pipelineString += fmt.Sprintf("udpsrc port=%d caps=\"application/x-rtp,media=audio,encoding-name=L16,clock-rate=48000,channels=2\" ! rtpL16depay ! adder.\n", i)
 	}
 	pipelineString += "liveadder name=adder ! opusenc ! appsink name=sink"
 
+	log.Print(pipelineString)
 	pipeline, err := gst.ParseLaunch(pipelineString)
 	if err != nil {
 		return fmt.Errorf("[AUDIOMIXER] error parsing pipeline")
