@@ -1,7 +1,5 @@
-module github.com/basheuft/gst-audiomixer
+module github.com/basheuft/audiomixer-server
 
 go 1.15
 
 require github.com/notedit/gst v0.0.7
-
-replace github.com/notedit/gst v0.0.7 => ../gst
